@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutique de Perfumes | Sistema de Ventas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div id="vista-login" class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="text-center mb-4">
+                <h2 style="color: #c5a880; font-weight: bold; letter-spacing: 2px;"><i class="bi bi-gem me-2"></i>PERFUME BOUTIQUE</h2>
+                <p class="text-muted">Gestión de Inventario y Puntos de Venta</p>
+            </div>
+            
+            <div class="card card-custom p-4 shadow-lg" id="card-login">
+                <h4 class="mb-3 text-white"><i class="bi bi-shield-lock me-2"></i>Iniciar Sesión</h4>
+                <form id="formLogin">
+                    <div class="mb-3">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="login-email" required placeholder="correo@boutique.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="login-password" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-elegant w-100 mb-3">Ingresar al Sistema</button>
+                    <p class="text-center m-0 small">¿No tienes cuenta? <a href="#" id="link-ir-registro" style="color: #c5a880;">Regístrate aquí</a></p>
+                </form>
+            </div>
+
+            <div class="card card-custom p-4 shadow-lg d-none" id="card-registro">
+                <h4 class="mb-3 text-white"><i class="bi bi-person-plus me-2"></i>Crear Cuenta de Usuario</h4>
+                <form id="formRegistro">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre Completo</label>
+                        <input type="text" class="form-control" id="reg-nombre" required placeholder="Ej. Administrador Principal">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="reg-email" required placeholder="correo@boutique.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="reg-password" required placeholder="Mínimo 6 caracteres">
+                    </div>
+                    <button type="submit" class="btn btn-elegant w-100 mb-3">Registrar Usuario</button>
+                    <p class="text-center m-0 small">¿Ya tienes cuenta? <a href="#" id="link-ir-login" style="color: #c5a880;">Inicia sesión</a></p>
+                </form>
+            </div>
+            <div id="msg-auth" class="mt-3 text-center"></div>
+        </div>
+    </div>
+</div>
+
+<div id="vista-dashboard" class="d-none">
+    <nav class="navbar navbar-expand-lg border-bottom border-secondary mb-4" style="background-color: #1a1a1a;">
+        <div class="container-fluid">
+            <a class="navbar-brand fs-4" href="#" style="color: #c5a880; font-weight: bold; letter-spacing: 1px;">
+                <i class="bi bi-gem me-2"></i>PERFUME BOUTIQUE
+            </a>
+            <div class="d-flex align-items-center">
+                <span class="text-muted me-3" id="usuario-sesion"><i class="bi bi-person-circle me-1"></i> Sesión Activa</span>
+                <button class="btn btn-sm btn-outline-danger" id="btn-cerrar-sesion"><i class="bi bi-box-arrow-right"></i> Salir</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4">
+        <div class="row">
+            <div class="col-md-3 col-lg-2 mb-4">
+                <div class="nav flex-column nav-pills card-custom p-2 rounded shadow" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <button class="nav-link active my-1 text-start" id="tab-productos" data-bs-toggle="pill" data-bs-target="#pane-productos" type="button" role="tab"><i class="bi bi-box-seam me-2"></i>Productos</button>
+                    <button class="nav-link my-1 text-start" id="tab-clientes" data-bs-toggle="pill" data-bs-target="#pane-clientes" type="button" role="tab"><i class="bi bi-people me-2"></i>Clientes</button>
+                    <button class="nav-link my-1 text-start" id="tab-ventas" data-bs-toggle="pill" data-bs-target="#pane-ventas" type="button" role="tab"><i class="bi bi-cart3 me-2"></i>Nueva Venta</button>
+                    <button class="nav-link my-1 text-start" id="tab-reportes" data-bs-toggle="pill" data-bs-target="#pane-reportes" type="button" role="tab"><i class="bi bi-graph-up-arrow me-2"></i>Reportes</button>
+                </div>
+            </div>
+
+            <div class="col-md-9 col-lg-10">
+                <div class="tab-content">
+                    
+                    <div class="tab-pane fade show active" id="pane-productos" role="tabpanel">
+                        <div class="row">
+                            <div class="col-xl-4 mb-4">
+                                <div class="card card-custom p-4 shadow">
+                                    <h4 class="mb-3" style="color: #c5a880;" id="titulo-form-producto"><i class="bi bi-plus-circle me-2"></i>Registrar Perfume</h4>
+                                    <form id="formPerfume">
+                                        <input type="hidden" id="prod-id">
+                                        <div class="mb-3">
+                                            <label class="form-label">Nombre del Perfume</label>
+                                            <input type="text" class="form-control" id="prod-nombre" required placeholder="Ej. Azzaro The Most Wanted">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Marca</label>
+                                            <input type="text" class="form-control" id="prod-marca" required placeholder="Ej. Azzaro">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Volumen (ml)</label>
+                                                <input type="number" class="form-control" id="prod-ml" required placeholder="100">
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label class="form-label">Precio ($)</label>
+                                                <input type="number" class="form-control" id="prod-precio" required placeholder="2800">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Stock Disponible</label>
+                                            <input type="number" class="form-control" id="prod-stock" required placeholder="15">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Notas Olfativas</label>
+                                            <input type="text" class="form-control" id="prod-notas" placeholder="Ej. Cardamomo, Toffee, Ámbar">
+                                        </div>
+                                        <button type="submit" class="btn btn-elegant w-100" id="btn-guardar-producto">Guardar Perfume</button>
+                                        <button type="button" class="btn btn-secondary w-100 mt-2 d-none" id="btn-cancelar-edicion">Cancelar Edición</button>
+                                    </form>
+                                    <div id="msg-producto" class="mt-2 text-center"></div>
+                                </div>
+                            </div>
+                            <div class="col-xl-8">
+                                <div class="card card-custom p-4 shadow">
+                                    <h4 class="mb-3" style="color: #c5a880;"><i class="bi bi-journal-text me-2"></i>Catálogo de Fragancias</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-dark table-striped align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Perfume</th>
+                                                    <th>Marca</th>
+                                                    <th>ml</th>
+                                                    <th>Precio</th>
+                                                    <th>Stock</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla-productos-body"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pane-clientes" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-4 mb-4">
+                                <div class="card card-custom p-4 shadow">
+                                    <h4 class="mb-3" style="color: #c5a880;"><i class="bi bi-person-plus me-2"></i>Registrar Cliente</h4>
+                                    <form id="formCliente">
+                                        <div class="mb-3">
+                                            <label class="form-label">Nombre(s)</label>
+                                            <input type="text" class="form-control" id="cli-nombre" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Primer Apellido</label>
+                                            <input type="text" class="form-control" id="cli-apellido1" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Segundo Apellido</label>
+                                            <input type="text" class="form-control" id="cli-apellido2">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Correo Electrónico</label>
+                                            <input type="email" class="form-control" id="cli-email" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-elegant w-100">Guardar Cliente</button>
+                                    </form>
+                                    <div id="msg-cliente" class="mt-2 text-center"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card card-custom p-4 shadow">
+                                    <h4 class="mb-3" style="color: #c5a880;"><i class="bi bi-people me-2"></i>Directorio de Clientes</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-dark table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nombre Completo</th>
+                                                    <th>Email</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla-clientes-body"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pane-ventas" role="tabpanel">
+                        <div class="card card-custom p-4 shadow mb-4">
+                            <h4 class="mb-4" style="color: #c5a880;"><i class="bi bi-receipt me-2"></i>Punto de Venta</h4>
+                            <form id="formVenta">
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Asignar Cliente</label>
+                                        <select class="form-select border-secondary" id="venta-cliente" required>
+                                            <option value="">-- Selecciona un cliente registrado --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <h5 class="text-white mb-3">Detalle de Productos</h5>
+                                <div id="contenedor-items-venta">
+                                    </div>
+                                
+                                <button type="button" class="btn btn-secondary btn-sm mt-2" id="btn-agregar-item"><i class="bi bi-plus-circle me-1"></i> Agregar otra pieza</button>
+
+                                <hr class="my-4 border-secondary">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h4 class="text-white m-0">TOTAL NETO:</h4>
+                                    <h2 class="m-0 fw-bold" style="color: #c5a880;" id="text-venta-total">$0.00</h2>
+                                </div>
+                                <button type="submit" class="btn btn-elegant btn-lg w-100">Procesar Venta y Registrar Ticket</button>
+                            </form>
+                            <div id="msg-venta" class="mt-3 text-center"></div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="pane-reportes" role="tabpanel">
+                        <h4 class="mb-4" style="color: #c5a880;"><i class="bi bi-graph-up-arrow me-2"></i>Indicadores de Rendimiento</h4>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-success text-dark p-4 rounded shadow text-center">
+                                    <h6 class="fw-bold">TOTAL VENDIDO EN TIENDA</h6>
+                                    <h2 class="fw-bold m-0" id="rep-total-vendido">$0.00</h2>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-warning text-dark p-4 rounded shadow text-center">
+                                    <h6 class="fw-bold">ALERTAS DE STOCK BAJO</h6>
+                                    <h2 class="fw-bold m-0" id="rep-alertas-stock">0</h2>
+                                    <small class="fw-semibold">Perfumes con menos de 5 unidades</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="card bg-info text-dark p-4 rounded shadow text-center">
+                                    <h6 class="fw-bold">TRANSACCIONES PREMIUM</h6>
+                                    <h2 class="fw-bold m-0" id="rep-ventas-premium">0</h2>
+                                    <small class="fw-semibold">Ventas superiores a $10,000</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    let cacheProductos = []; // Almacén local temporal para calcular precios dinámicamente
+
+    // ==========================================
+    // CONTROL DE PANTALLAS (SPA) Y AUTH
+    // ==========================================
+    document.getElementById('link-ir-registro').addEventListener('click', () => {
+        document.getElementById('card-login').classList.add('d-none');
+        document.getElementById('card-registro').classList.remove('d-none');
+    });
+
+    document.getElementById('link-ir-login').addEventListener('click', () => {
+        document.getElementById('card-registro').classList.add('d-none');
+        document.getElementById('card-login').classList.remove('d-none');
+    });
+
+    // MOCK LOGIN (Bypass para desarrollo visual rápido, conéctalo a /api/auth si agregas rutas de usuario)
+    document.getElementById('formLogin').addEventListener('submit', (e) => {
+        e.preventDefault();
+        document.getElementById('vista-login').classList.add('d-none');
+        document.getElementById('vista-dashboard').classList.remove('d-none');
+        inicializarDashboard();
+    });
+
+    document.getElementById('btn-cerrar-sesion').addEventListener('click', () => {
+        document.getElementById('vista-dashboard').classList.add('d-none');
+        document.getElementById('vista-login').classList.remove('d-none');
+    });
+
+    function inicializarDashboard() {
+        cargarProductos();
+        cargarClientes();
+        inicializarModuloVentas();
+        cargarReportes();
+    }
+
+    // ==========================================
+    // MÓDULO PRODUCTOS (CRUD)
+    // ==========================================
+    document.getElementById('formPerfume').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('prod-id').value;
+        const perfume = {
+            nombre: document.getElementById('prod-nombre').value,
+            marca: document.getElementById('prod-marca').value,
+            mililitros: document.getElementById('prod-ml').value,
+            precio: document.getElementById('prod-precio').value,
+            stock: document.getElementById('prod-stock').value,
+            notas_principales: document.getElementById('prod-notas').value
+        };
+
+        const url = id ? `/api/productos/${id}` : '/api/productos';
+        const method = id ? 'PUT' : 'POST';
+
+        try {
+            const res = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(perfume)
+            });
+            if (res.ok) {
+                document.getElementById('msg-producto').innerHTML = `<span class="text-success">✅ Procesado correctamente</span>`;
+                resetFormProducto();
+                cargarProductos();
+                cargarReportes();
+            }
+        } catch (err) { console.error(err); }
+    });
+
+    async function cargarProductos() {
+        try {
+            const res = await fetch('/api/productos');
+            cacheProductos = await res.json();
+            const tableBody = document.getElementById('tabla-productos-body');
+            tableBody.innerHTML = '';
+            
+            cacheProductos.forEach(p => {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td><strong>${p.nombre}</strong></td>
+                        <td>${p.marca}</td>
+                        <td>${p.mililitros}ml</td>
+                        <td class="text-success">$${p.precio}</td>
+                        <td><span class="badge ${p.stock < 5 ? 'bg-danger':'bg-secondary'}">${p.stock} pz</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-warning me-1" onclick="prepararEdicion('${p._id}', '${p.nombre}', '${p.marca}', ${p.mililitros}, ${p.precio}, ${p.stock}, '${p.notas_principales || ''}')"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="eliminarProducto('${p._id}')"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            actualizarSelectoresPerfume();
+        } catch (err) { console.error(err); }
+    }
+
+    function prepararEdicion(id, nombre, marca, ml, precio, stock, notas) {
+        document.getElementById('prod-id').value = id;
+        document.getElementById('prod-nombre').value = nombre;
+        document.getElementById('prod-marca').value = marca;
+        document.getElementById('prod-ml').value = ml;
+        document.getElementById('prod-precio').value = precio;
+        document.getElementById('prod-stock').value = stock;
+        document.getElementById('prod-notas').value = notas;
+        
+        document.getElementById('titulo-form-producto').innerHTML = `<i class="bi bi-pencil-square me-2"></i>Editar Perfume`;
+        document.getElementById('btn-guardar-producto').innerText = "Actualizar Cambios";
+        document.getElementById('btn-cancelar-edicion').classList.remove('d-none');
+    }
+
+    document.getElementById('btn-cancelar-edicion').addEventListener('click', resetFormProducto);
+
+    function resetFormProducto() {
+        document.getElementById('formPerfume').reset();
+        document.getElementById('prod-id').value = '';
+        document.getElementById('titulo-form-producto').innerHTML = `<i class="bi bi-plus-circle me-2"></i>Registrar Perfume`;
+        document.getElementById('btn-guardar-producto').innerText = "Guardar Perfume";
+        document.getElementById('btn-cancelar-edicion').classList.add('d-none');
+    }
+
+    async function eliminarProducto(id) {
+        if(confirm('¿Seguro que deseas eliminar este perfume del inventario?')) {
+            try {
+                const res = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
+                if(res.ok) { cargarProductos(); cargarReportes(); }
+            } catch (err) { console.error(err); }
+        }
+    }
+
+// ==========================================
+    // MÓDULO CLIENTES
+    // ==========================================
+    document.getElementById('formCliente').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const cliente = {
+            nombre: document.getElementById('cli-nombre').value,
+            primer_apellido: document.getElementById('cli-apellido1').value,
+            segundo_apellido: document.getElementById('cli-apellido2').value,
+            email: document.getElementById('cli-email').value
+        };
+
+        try {
+            const res = await fetch('/api/clientes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(cliente)
+            });
+            
+            const data = await res.json(); 
+
+            if(res.ok) {
+                document.getElementById('msg-cliente').innerHTML = `<span class="text-success">✅ Cliente registrado con éxito</span>`;
+                document.getElementById('formCliente').reset();
+                cargarClientes(); // Ahora sí va a encontrar la función
+            } else {
+                document.getElementById('msg-cliente').innerHTML = `<span class="text-danger">❌ Error: ${data.error || 'No se guardó'} (${data.detalle || ''})</span>`;
+            }
+        } catch (err) { 
+            console.error(err);
+            document.getElementById('msg-cliente').innerHTML = `<span class="text-danger">❌ Error crítico de conexión con el servidor</span>`;
+        }
+    });
+
+    // ¡La función que se había escapado!
+    async function cargarClientes() {
+        try {
+            const res = await fetch('/api/clientes');
+            const clientes = await res.json();
+            const tableBody = document.getElementById('tabla-clientes-body');
+            const selectCliente = document.getElementById('venta-cliente'); // También actualiza el selector de ventas
+            
+            tableBody.innerHTML = '';
+            selectCliente.innerHTML = '<option value="">-- Selecciona un cliente registrado --</option>';
+
+            clientes.forEach(c => {
+                const nombreCompleto = `${c.nombre} ${c.primer_apellido} ${c.segundo_apellido || ''}`;
+                tableBody.innerHTML += `<tr><td><strong>${nombreCompleto}</strong></td><td>${c.email}</td></tr>`;
+                selectCliente.innerHTML += `<option value="${c._id}">${nombreCompleto}</option>`;
+            });
+        } catch (err) { console.error(err); }
+    }
+    // ==========================================
+    // MÓDULO VENTAS (LÓGICA INTERACTIVA)
+    // ==========================================
+    function inicializarModuloVentas() {
+        const contenedor = document.getElementById('contenedor-items-venta');
+        contenedor.innerHTML = ''; 
+        agregarFilaVenta(); // Inicializa con un renglón en blanco
+    }
+
+    document.getElementById('btn-agregar-item').addEventListener('click', agregarFilaVenta);
+
+    function agregarFilaVenta() {
+        const contenedor = document.getElementById('contenedor-items-venta');
+        const div = document.createElement('div');
+        div.className = 'row g-2 align-items-end mb-2 fila-item-venta';
+        
+        let opciones = '<option value="">-- Selecciona Fragancia --</option>';
+        cacheProductos.forEach(p => {
+            opciones += `<option value="${p._id}" data-precio="${p.precio}">${p.nombre} (${p.marca}) - $${p.precio}</option>`;
+        });
+
+        div.innerHTML = `
+            <div class="col-md-6">
+                <select class="form-select select-perfume-venta" required onchange="calcularTotalVenta()">
+                    ${opciones}
+                </select>
+            </div>
+            <div class="col-col-md-3">
+                <input type="number" class="form-control cant-perfume-venta" value="1" min="1" required oninput="calcularTotalVenta()">
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-outline-danger w-100" onclick="removerFilaVenta(this)"><i class="bi bi-trash"></i></button>
+            </div>
+        `;
+        contenedor.appendChild(div);
+    }
+
+    function removerFilaVenta(boton) {
+        const filas = document.querySelectorAll('.fila-item-venta');
+        if(filas.length > 1) {
+            boton.closest('.fila-item-venta').remove();
+            calcularTotalVenta();
+        }
+    }
+
+    function actualizarSelectoresPerfume() {
+        // Actualiza las opciones si el catálogo cambia en caliente
+        const selectores = document.querySelectorAll('.select-perfume-venta');
+        selectores.forEach(select => {
+            const valorSeleccionado = select.value;
+            let opciones = '<option value="">-- Selecciona Fragancia --</option>';
+            cacheProductos.forEach(p => {
+                opciones += `<option value="${p._id}" data-precio="${p.precio}">${p.nombre} (${p.marca}) - $${p.precio}</option>`;
+            });
+            select.innerHTML = opciones;
+            select.value = valorSeleccionado;
+        });
+    }
+
+    function calcularTotalVenta() {
+        let total = 0;
+        const filas = document.querySelectorAll('.fila-item-venta');
+        
+        filas.forEach(fila => {
+            const select = fila.querySelector('.select-perfume-venta');
+            const cantidadInput = fila.querySelector('.cant-perfume-venta');
+            const optionSeleccionada = select.options[select.selectedIndex];
+            
+            if(optionSeleccionada && optionSeleccionada.value) {
+                const precio = parseFloat(optionSeleccionada.getAttribute('data-precio'));
+                const cantidad = parseInt(cantidadInput.value) || 0;
+                total += precio * cantidad;
+            }
+        });
+        
+        document.getElementById('text-venta-total').innerText = `$${total.toFixed(2)}`;
+    }
+
+    document.getElementById('formVenta').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const filas = document.querySelectorAll('.fila-item-venta');
+        const productosVenta = [];
+
+        filas.forEach(fila => {
+            const select = fila.querySelector('.select-perfume-venta');
+            const cantidad = fila.querySelector('.cant-perfume-venta').value;
+            if(select.value) {
+                productosVenta.push({ producto_id: select.value, cantidad: parseInt(cantidad) });
+            }
+        });
+
+        const payload = {
+            cliente_id: document.getElementById('venta-cliente').value,
+            productos: productosVenta
+        };
+
+        try {
+            const res = await fetch('/api/ventas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if(res.ok) {
+                document.getElementById('msg-venta').innerHTML = `<span class="text-success">✅ Venta procesada. ¡Ticket #${data.venta._id || 'Generado'}!</span>`;
+                document.getElementById('formVenta').reset();
+                inicializarModuloVentas();
+                document.getElementById('text-venta-total').innerText = "$0.00";
+                cargarProductos(); // Refresca inventario por reducción de stock
+                cargarReportes();
+            } else {
+                document.getElementById('msg-venta').innerHTML = `<span class="text-danger">❌ Error: ${data.error || 'No se pudo procesar'}</span>`;
+            }
+        } catch (err) { console.error(err); }
+    });
+
+    // ==========================================
+    // MÓDULO REPORTES
+    // ==========================================
+    async function cargarReportes() {
+        try {
+            // Reclama las métricas avanzadas directamente de las consultas MongoDB
+            const res = await fetch('/api/ventas/reportes');
+            if(res.ok) {
+                const r = await res.json();
+                document.getElementById('rep-total-vendido').innerText = `$${(r.totalVendido || 0).toFixed(2)}`;
+                document.getElementById('rep-ventas-premium').innerText = r.ventasPremium || 0;
+            }
+            // Cuenta de stock crítico (< 5 unidades) calculada de la caché local de productos
+            const stockCritico = cacheProductos.filter(p => p.stock < 5).length;
+            document.getElementById('rep-alertas-stock').innerText = stockCritico;
+        } catch (err) { console.error(err); }
+    }
+</script>
+</body>
+</html>
